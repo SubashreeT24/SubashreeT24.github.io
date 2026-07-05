@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subashree — Embedded &amp; IoT Engineer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338B0A9'/%3E%3Cstop offset='100%25' stop-color='%233A7CAD'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='%230B0F17'/%3E%3Ctext x='50' y='71' font-family='monospace' font-weight='700' font-size='62' text-anchor='middle' fill='url(%23g)'%3ES%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="Subashree — Embedded & IoT Engineer">
+<meta property="og:description" content="I build things that sense, compute, and talk to hardware. ECE student at VIT Chennai working in embedded systems, IoT, and VLSI.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://subashreet24.github.io/og-image.png">
+<meta property="og:url" content="https://subashreet24.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0F17;
+    --panel:#131A26;
+    --panel-2:#1A2333;
+    --copper:#2FA6A0;
+    --amber:#5FE0D0;
+    --off:#EDEAE3;
+    --muted:#8B95A8;
+    --line: rgba(237,234,227,0.08);
+    --grad: linear-gradient(135deg, #38B0A9 0%, #3A7CAD 100%);
+    --grad-soft: linear-gradient(135deg, rgba(56,176,169,0.9) 0%, rgba(58,124,173,0.9) 100%);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% 0%, rgba(47,166,160,0.10), transparent 60%),
+      radial-gradient(ellipse 800px 500px at 85% 20%, rgba(46,102,144,0.10), transparent 60%),
+      linear-gradient(180deg, #0B0F17 0%, #0D131D 50%, #0B0F17 100%);
+    background-attachment:fixed;
+    color:var(--off);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.mono,nav a,.card-tag,.btn,.label{
+    font-family:'Space Mono',monospace;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6%;
+    background:rgba(11,15,23,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .scroll-progress{
+    position:absolute; top:0; left:0; height:2px; width:0%;
+    background:var(--grad);
+    transition:width .1s linear;
+  }
+  nav a.active{color:var(--off);}
+  nav a{position:relative;}
+  nav a.active::after{
+    content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+    background:var(--grad); border-radius:2px;
+  }
+
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  a:focus-visible, button:focus-visible, .card:focus-visible{
+    outline:2px solid var(--copper); outline-offset:3px;
+  }
+
+  .back-to-top{
+    position:fixed; bottom:28px; right:28px; z-index:60;
+    width:44px; height:44px; border-radius:50%;
+    background:var(--panel-2); border:1px solid var(--line);
+    color:var(--off); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:0; pointer-events:none;
+    transition:opacity .3s ease, transform .2s ease, border-color .2s ease;
+  }
+  .back-to-top.visible{opacity:1; pointer-events:auto;}
+  .back-to-top:hover{border-color:rgba(56,176,169,0.5); transform:translateY(-3px);}
+  .logo{font-weight:700; font-size:17px; letter-spacing:1px; color:var(--off);}
+  .logo span{color:var(--copper);}
+  nav{display:flex; align-items:center; gap:32px;}
+  nav a{font-size:15px; color:var(--muted); transition:color .2s;}
+  nav a:hover{color:var(--off);}
+  .nav-actions{display:flex; align-items:center; gap:12px;}
+  .btn{
+    font-size:13px; padding:9px 18px; border-radius:3px;
+    border:1px solid var(--copper);
+    color:var(--copper);
+    transition:all .2s;
+    white-space:nowrap;
+  }
+  .btn.filled{background:var(--grad); border-color:transparent; color:#0B0F17; font-weight:700;}
+  .btn:active{background:var(--copper); color:var(--ink);}
+  .btn.filled:active{filter:brightness(1.12); border-color:transparent;}
+  @media (hover:hover){
+    .btn:hover{background:var(--copper); color:var(--ink);}
+    .btn.filled:hover{filter:brightness(1.12); border-color:transparent;}
+  }
+  .icon-btn{
+    display:flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--line); color:var(--muted);
+    transition:all .2s;
+  }
+  @media (hover:hover){
+    .icon-btn:hover{color:var(--off); border-color:var(--copper); transform:translateY(-2px);}
+  }
+  .menu-toggle{display:none; background:none; border:none; color:var(--off); font-size:22px; cursor:pointer; z-index:60;}
+
+  /* MOBILE NAV DRAWER */
+  .mobile-nav{
+    position:fixed; top:0; right:0; height:100vh; width:min(78vw, 300px);
+    background:var(--panel-2); border-left:1px solid var(--line);
+    z-index:110; display:flex; flex-direction:column; gap:22px;
+    padding:80px 32px 32px 32px;
+    transform:translateX(100%); transition:transform .3s ease;
+  }
+  .mobile-nav.active{transform:translateX(0);}
+  .mobile-nav a{font-size:16px; color:var(--off);}
+  .mobile-nav-close{
+    position:absolute; top:20px; right:24px; background:none; border:none;
+    color:var(--off); font-size:26px; cursor:pointer;
+  }
+  .mobile-nav-actions{display:flex; flex-direction:column; gap:12px; margin-top:12px;}
+  .mobile-nav-actions .btn{text-align:center;}
+  .mobile-nav-overlay{
+    position:fixed; inset:0; background:rgba(11,15,23,0.6);
+    z-index:105; display:none;
+  }
+  .mobile-nav-overlay.active{display:block;}
+
+  /* HERO */
+  .hero{
+    min-height:88vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:0 6%;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:48px; flex-wrap:wrap;
+  }
+  .hero-text{min-width:0; flex:1 1 480px;}
+  .hero-photo{
+    flex:0 0 auto;
+    width:200px; height:200px; border-radius:50%;
+    overflow:hidden;
+    border:2px solid transparent;
+    background:linear-gradient(var(--ink),var(--ink)) padding-box, var(--grad) border-box;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  }
+  .hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+
+  .eyebrow{
+    color:var(--copper); font-size:14px; letter-spacing:2px;
+    margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{
+    content:''; width:8px; height:8px; border-radius:50%;
+    background:var(--grad); box-shadow:0 0 6px rgba(47,166,160,0.5);
+    animation:blink 2.4s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .hero h1{
+    font-size:clamp(32px, 5vw, 52px);
+    line-height:1.25; font-weight:700; margin:0 0 22px 0;
+    max-width:820px;
+  }
+  .hero h1 .verb{
+    background:var(--grad);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p.sub{
+    font-family:'Inter',sans-serif; color:var(--muted);
+    font-size:18px; max-width:600px; line-height:1.6; margin-bottom:34px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .hero-actions .btn{padding:13px 26px; font-size:14px;}
+
+  /* WAVEFORM SIGNATURE */
+  .waveform{
+    width:100%; max-width:900px; height:70px; margin-top:56px;
+    opacity:0.75;
+  }
+  .waveform path{
+    stroke:url(#waveGrad);
+    stroke-width:2;
+    fill:none;
+  }
+  .wave-sense{stroke-dasharray:6 4; animation:dash 3s linear infinite;}
+  @keyframes dash{to{stroke-dashoffset:-40;}}
+
+  /* SECTION SHARED */
+  section{padding:110px 6%;}
+  .section-head{margin-bottom:56px;}
+  .label{color:var(--copper); font-size:13px; letter-spacing:2px; margin-bottom:12px; display:block;}
+  section h2{font-size:clamp(26px,3.5vw,36px); margin:0; font-weight:700;}
+
+  /* ABOUT */
+  #about{background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .about-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:60px; align-items:start;}
+  .about-grid p{color:var(--muted); font-size:16.5px; line-height:1.75; margin-bottom:18px;}
+  .skills-groups{display:flex; flex-direction:column; gap:22px;}
+  .skill-group-title{
+    font-family:'Space Mono',monospace; font-size:14.5px; font-weight:700; letter-spacing:1px;
+    color:var(--copper); display:block; margin-bottom:14px;
+  }
+  .skill-chips{display:flex; flex-wrap:wrap; gap:9px;}
+  .skill-chip{
+    font-size:14px; font-weight:600; color:var(--off);
+    border:1px solid var(--line); padding:10px 18px; border-radius:7px;
+    background:rgba(255,255,255,0.03);
+    transition:border-color .2s, transform .2s;
+  }
+  .skill-chip:hover{border-color:rgba(56,176,169,0.5); transform:translateY(-2px);}
+
+  .exploring-strip{
+    margin-top:48px; padding-top:32px; border-top:1px solid var(--line);
+    display:flex; align-items:center; gap:24px; flex-wrap:wrap;
+  }
+  .exploring-label{
+    font-size:13px; font-weight:700; letter-spacing:1.5px; color:var(--muted);
+    display:flex; align-items:center; gap:10px; white-space:nowrap;
+  }
+  .status-dot-inline{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--grad);
+    box-shadow:0 0 6px rgba(56,176,169,0.6);
+    animation:blink 2.4s infinite;
+    display:inline-block;
+  }
+  .exploring-tags{display:flex; flex-wrap:wrap; gap:10px;}
+  .exploring-tag{
+    font-family:'Space Mono',monospace; font-size:14px; color:var(--off);
+    border:1px solid var(--line); padding:8px 16px; border-radius:20px;
+    background:rgba(255,255,255,0.02);
+    transition:border-color .2s;
+  }
+  .exploring-tag:hover{border-color:rgba(56,176,169,0.4);}
+
+  /* EXPERIENCE TIMELINE */
+  .timeline{position:relative; padding-left:32px;}
+  .timeline::before{
+    content:''; position:absolute; left:6px; top:6px; bottom:6px;
+    width:2px; background:linear-gradient(180deg, rgba(56,176,169,0.5), rgba(58,124,173,0.1));
+  }
+  .timeline-item{position:relative; padding-bottom:8px;}
+  .timeline-marker{
+    position:absolute; left:-32px; top:4px;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--ink); border:2px solid transparent;
+    background-image:linear-gradient(var(--ink), var(--ink)), var(--grad);
+    background-origin:border-box; background-clip:padding-box, border-box;
+  }
+  .timeline-content{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:28px;
+  }
+  .timeline-top{
+    display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px;
+    margin-bottom:6px;
+  }
+  .timeline-content h3{
+    font-family:'Inter',sans-serif; font-size:18px; font-weight:600; margin:0;
+  }
+  .timeline-date{
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--muted);
+    white-space:nowrap;
+  }
+  .timeline-org{color:var(--copper); font-size:14px; font-weight:600; margin:0 0 14px 0;}
+  .timeline-desc{color:var(--muted); font-size:15px; line-height:1.7; margin:0 0 14px 0;}
+  .timeline-list{list-style:none; margin:0 0 18px 0; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .timeline-list li{color:var(--muted); font-size:15px; line-height:1.6; padding-left:20px; position:relative;}
+  .timeline-list li::before{content:'▸'; color:var(--copper); position:absolute; left:0; top:0;}
+
+  /* PROJECTS */
+  .project-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+    gap:24px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:32px 28px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card-thumb{
+    width:100%; aspect-ratio:16/10; border-radius:7px; overflow:hidden;
+    margin-bottom:18px; background:var(--panel-2);
+  }
+  .card-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .card::before{
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--grad);
+    transform:scaleX(0); transform-origin:left;
+    transition:transform .3s ease;
+  }
+  .card::after{
+    content:attr(data-num);
+    position:absolute; top:10px; right:18px;
+    font-family:'Space Mono',monospace;
+    font-size:64px; font-weight:700;
+    color:rgba(237,234,227,0.04);
+    line-height:1; pointer-events:none;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(56,176,169,0.4);
+    box-shadow:0 16px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(56,176,169,0.08);
+  }
+  .card:hover::before{transform:scaleX(1);}
+  .card-num{color:var(--muted); font-size:13px; position:relative; z-index:1;}
+  .card h3{font-size:19px; margin:14px 0 10px 0; font-family:'Inter',sans-serif; font-weight:600; position:relative; z-index:1;}
+  .card p{color:var(--muted); font-size:14.5px; line-height:1.65; margin:0 0 20px 0; position:relative; z-index:1;}
+  .card-footer{
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative; z-index:1;
+  }
+  .card-arrow{
+    display:flex; align-items:center; justify-content:center;
+    width:30px; height:30px; border-radius:50%;
+    border:1px solid var(--line); color:var(--muted);
+    font-size:14px;
+    transition:all .25s ease;
+    flex-shrink:0;
+  }
+  .card:hover .card-arrow{
+    background:var(--grad); border-color:transparent; color:#0B0F17;
+    transform:rotate(45deg);
+  }
+  .tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .card-tag{
+    font-size:13px; color:#7FC2BC; border:1px solid rgba(47,166,160,0.3);
+    padding:5px 12px; border-radius:20px;
+  }
+
+  /* MODAL */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(11,15,23,0.85);
+    backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center;
+    z-index:100; padding:20px;
+  }
+  .modal-overlay.active{display:flex;}
+  .modal{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    max-width:600px; width:100%; padding:40px; max-height:85vh; overflow-y:auto;
+    position:relative;
+  }
+  .modal-close{
+    position:absolute; top:20px; right:20px; background:none; border:none;
+    color:var(--muted); font-size:22px; cursor:pointer;
+  }
+  .modal-close:hover{color:var(--off);}
+  .modal h3{font-size:21px; font-family:'Inter',sans-serif; margin:6px 0 6px 0;}
+  .modal .label{margin-bottom:16px;}
+  .modal p{color:var(--muted); line-height:1.7; font-size:15.5px;}
+  .modal .btn{margin-top:20px; display:inline-block;}
+
+  /* CONTACT */
+  #contact .section-head{margin-bottom:36px; text-align:left;}
+  .contact-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:50px; align-items:start;}
+  .contact-form{display:flex; flex-direction:column; gap:18px;}
+  .form-row{display:flex; flex-direction:column; gap:8px;}
+  .form-row label{
+    font-family:'Space Mono',monospace; font-size:13px; letter-spacing:1px; color:var(--muted);
+  }
+  .form-row input, .form-row textarea{
+    background:var(--panel); border:1px solid var(--line); border-radius:6px;
+    padding:12px 14px; color:var(--off); font-family:'Inter',sans-serif; font-size:15px;
+    resize:vertical; transition:border-color .2s;
+  }
+  .form-row input:focus, .form-row textarea:focus{
+    outline:none; border-color:rgba(56,176,169,0.5);
+  }
+  .form-submit{align-self:flex-start; border:none; cursor:pointer; margin-top:4px;}
+  .form-status{font-size:14px; color:var(--muted); margin:0;}
+  .contact-side{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:28px;
+  }
+  .contact-side-text{color:var(--muted); font-size:15px; margin:0 0 18px 0;}
+  .contact-side .contact-links{display:flex; flex-direction:column; gap:12px;}
+  .contact-side .btn{text-align:center;}
+
+  @media (max-width:820px){
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  footer{
+    text-align:center; padding:30px 6%; color:var(--muted);
+    font-size:14px; border-top:1px solid var(--line);
+  }
+
+  @media (max-width:820px){
+    nav, .nav-actions{display:none;}
+    .menu-toggle{display:block;}
+    .about-grid{grid-template-columns:1fr;}
+    .hero-inner{flex-direction:column-reverse; align-items:flex-start;}
+    .hero-photo{width:140px; height:140px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .eyebrow::before, .wave-sense{animation:none;}
+  }
+
+  @media (max-width:480px){
+    .hero{min-height:auto; padding-top:60px; padding-bottom:60px;}
+    .hero h1{font-size:28px;}
+    .hero p.sub{font-size:16px;}
+    .eyebrow{font-size:12px;}
+    section{padding:70px 6%;}
+    section h2{font-size:22px;}
+    .label{font-size:12px;}
+    .timeline-content{padding:20px;}
+    .card{padding:26px 22px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="scroll-progress" id="scroll-progress"></div>
+  <div class="logo">SUBA<span>SHREE</span></div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="nav-actions">
+    <a class="icon-btn" href="mailto:tsubashree24@gmail.com" id="mail-link" title="Email" aria-label="Email" data-mailto="tsubashree24@gmail.com">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg>
+    </a>
+    <a class="icon-btn" href="https://www.linkedin.com/in/thirumalai-subashree-8ba204210" id="linkedin-link" title="LinkedIn" aria-label="LinkedIn" target="_blank">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56z"/></svg>
+    </a>
+    <a class="icon-btn" href="https://github.com/SubashreeT24" id="github-link" title="GitHub" aria-label="GitHub" target="_blank">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.14c-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.81 1.18 1.83 1.18 3.09 0 4.41-2.7 5.38-5.27 5.67.42.36.78 1.08.78 2.17v3.22c0 .3.21.66.79.55A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+    </a>
+    <a class="btn" href="Thirumalai_Subashree_Resume.pdf" id="resume-link" target="_blank">Resume</a>
+  </div>
+  <button class="menu-toggle" id="menu-toggle">☰</button>
+</header>
+
+<div class="mobile-nav" id="mobile-nav">
+  <button class="mobile-nav-close" id="mobile-nav-close">×</button>
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#contact">Contact</a>
+  <div class="mobile-nav-actions">
+    <a class="btn" href="mailto:tsubashree24@gmail.com" id="mail-link-mobile" data-mailto="tsubashree24@gmail.com">Email</a>
+    <a class="btn" href="https://www.linkedin.com/in/thirumalai-subashree-8ba204210" id="linkedin-link-mobile">LinkedIn</a>
+    <a class="btn" href="Thirumalai_Subashree_Resume.pdf" id="resume-link-mobile" target="_blank">Resume</a>
+    <a class="btn filled" href="https://github.com/SubashreeT24" id="github-link-mobile">GitHub</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow">ECE · VIT CHENNAI · EMBEDDED &amp; IOT</div>
+      <div class="eyebrow" style="margin-bottom:22px;">OPEN TO INTERNSHIPS</div>
+      <h1>I build things that <span class="verb">sense</span>, <span class="verb">compute</span>,<br>and talk to hardware.</h1>
+      <p class="sub">Exploring electronics one project at a time — from embedded systems and IoT to digital design — with a focus on learning by building.</p>
+      <div class="hero-actions">
+        <a class="btn filled" href="#projects">View Projects</a>
+        <a class="btn" href="Thirumalai_Subashree_Resume.pdf" id="resume-link-2" target="_blank">Resume</a>
+        <a class="btn" href="https://github.com/SubashreeT24" id="github-link-2">GitHub</a>
+      </div>
+
+      <svg class="waveform" viewBox="0 0 900 70" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#38B0A9"/>
+            <stop offset="100%" stop-color="#3A7CAD"/>
+          </linearGradient>
+        </defs>
+        <path class="wave-sense" d="M0,35 L60,35 L75,10 L90,60 L105,35 L180,35 L195,15 L210,55 L225,35 L900,35"/>
+      </svg>
+    </div>
+
+    <!-- OPTIONAL PROFILE PHOTO
+         Replace src below with your own photo path (e.g. "assets/profile.jpg")
+         and remove this comment block to show it. -->
+    <!--
+    <div class="hero-photo">
+      <img src="assets/profile.jpg" alt="Subashree">
+    </div>
+    -->
+  </div>
+</section>
+
+<section id="about" class="reveal">
+  <div class="section-head">
+    <span class="label">ABOUT</span>
+    <h2>Currently building at the intersection of hardware and software.</h2>
+  </div>
+  <div class="about-grid">
+    <div>
+      <p>Third-year Electronics and Communication Engineering student passionate about embedded systems and IoT. I enjoy turning ideas into working prototypes, exploring how hardware and software come together, and learning through building, experimenting, and solving real-world problems.</p>
+      <p>Alongside this, I have a growing interest in VLSI and digital design — mainly at the frontend/RTL level, including device modeling, simulation, and design.</p>
+    </div>
+    <div class="skills-groups">
+      <div class="skill-group">
+        <span class="skill-group-title">Microcontrollers</span>
+        <div class="skill-chips">
+          <span class="skill-chip">ESP32</span>
+          <span class="skill-chip">STM32</span>
+          <span class="skill-chip">Arduino</span>
+          <span class="skill-chip">Raspberry Pi Pico</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Languages</span>
+        <div class="skill-chips">
+          <span class="skill-chip">C</span>
+          <span class="skill-chip">Embedded C</span>
+          <span class="skill-chip">Java</span>
+          <span class="skill-chip">Python</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Cloud &amp; Backend</span>
+        <div class="skill-chips">
+          <span class="skill-chip">Firebase</span>
+          <span class="skill-chip">Node.js</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Mobile</span>
+        <div class="skill-chips">
+          <span class="skill-chip">Flutter</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Tools</span>
+        <div class="skill-chips">
+          <span class="skill-chip">STM32CubeIDE</span>
+          <span class="skill-chip">STM32CubeMX</span>
+          <span class="skill-chip">Keil &mu;Vision</span>
+          <span class="skill-chip">MATLAB</span>
+          <span class="skill-chip">Git</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Comms &amp; Protocols</span>
+        <div class="skill-chips">
+          <span class="skill-chip">WiFi</span>
+          <span class="skill-chip">HTTP</span>
+          <span class="skill-chip">I2C</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Digital Design &amp; VLSI</span>
+        <div class="skill-chips">
+          <span class="skill-chip">PCB Design</span>
+          <span class="skill-chip">Digital Systems</span>
+          <span class="skill-chip">VLSI (RTL/Frontend)</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <span class="skill-group-title">Simulation Tools</span>
+        <div class="skill-chips">
+          <span class="skill-chip">Cadence Virtuoso</span>
+          <span class="skill-chip">Sentaurus TCAD</span>
+          <span class="skill-chip">LTSpice</span>
+          <span class="skill-chip">Quartus</span>
+          <span class="skill-chip">ModelSim</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exploring-strip">
+    <span class="exploring-label">
+      <span class="status-dot-inline"></span>CURRENTLY EXPLORING
+    </span>
+    <div class="exploring-tags">
+      <span class="exploring-tag">PCB Design</span>
+      <span class="exploring-tag">RTOS Basics</span>
+      <span class="exploring-tag">FPGA Fundamentals</span>
+      <span class="exploring-tag">Communication Protocols</span>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="reveal">
+  <div class="section-head">
+    <span class="label">EXPERIENCE</span>
+    <h2>Hands-on time with real hardware.</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-marker"></div>
+      <div class="timeline-content">
+        <div class="timeline-top">
+          <h3>Embedded Systems Intern</h3>
+          <span class="timeline-date">Jun 2 – Jul 2, 2026</span>
+        </div>
+        <p class="timeline-org">Evolve Robot Lab</p>
+        <ul class="timeline-list">
+          <li>Circuit design and simulation (Tinkercad)</li>
+          <li>Arduino projects — sensor interfacing, motor control, robotics</li>
+          <li>Built a robotic arm and an obstacle-avoiding robot</li>
+          <li>IoT integration with ESP32-S3, ThingSpeak, and Blynk</li>
+          <li>STM32 and Raspberry Pi Pico basics — LED control, sensor interfacing</li>
+          <li>ESP32-S3 audio/camera work that later grew into SheAlert</li>
+        </ul>
+        <div class="tags">
+          <span class="card-tag">Arduino</span>
+          <span class="card-tag">ESP32-S3</span>
+          <span class="card-tag">STM32</span>
+          <span class="card-tag">Raspberry Pi Pico</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="reveal">
+  <div class="section-head">
+    <span class="label">PROJECTS</span>
+    <h2>Selected work</h2>
+  </div>
+  <div class="project-grid" id="project-grid"></div>
+</section>
+
+<section id="contact" class="reveal">
+  <div class="section-head">
+    <span class="label">CONTACT</span>
+    <h2>Open to internships, project ideas, or suggestions — drop a message below.</h2>
+    <p style="color:var(--muted); font-size:15px; margin-top:14px; max-width:560px; line-height:1.6;">Available remote/online throughout the semester; open to on-site internships during college breaks.</p>
+  </div>
+
+  <div class="contact-grid">
+    <form class="contact-form" id="contact-form" action="https://formspree.io/f/mqeoeylk" method="POST">
+      <div class="form-row">
+        <label for="cf-name">Name</label>
+        <input type="text" id="cf-name" name="name" required>
+      </div>
+      <div class="form-row">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" required>
+      </div>
+      <div class="form-row">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn filled form-submit">Send Message →</button>
+      <p class="form-status" id="form-status"></p>
+    </form>
+
+    <div class="contact-side">
+      <p class="contact-side-text">Prefer a quicker route? Reach out directly:</p>
+      <div class="contact-links">
+        <a class="btn" href="mailto:tsubashree24@gmail.com" data-mailto="tsubashree24@gmail.com">Email</a>
+        <a class="btn" href="https://www.linkedin.com/in/thirumalai-subashree-8ba204210" target="_blank">LinkedIn</a>
+        <a class="btn" href="https://github.com/SubashreeT24" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
+
+<footer>© 2026 Subashree. Built with intent.</footer>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">×</button>
+    <span class="label" id="modal-tag">TAG</span>
+    <h3 id="modal-title">Title</h3>
+    <p id="modal-desc">Description</p>
+    <div class="tags" id="modal-stack"></div>
+    <a class="btn filled" href="#" id="modal-link" target="_blank">View on GitHub →</a>
+  </div>
+</div>
+
+<script>
+// Order: SheAlert, Smart Coffee Maker, Combinational Lock, 14nm MOSFET, Gas Alert, Obstacle-Detecting Glasses
+const projects = [
+  {
+    num: "01",
+    title: "SheAlert",
+    tag: "WEARABLE · ESP32-S3",
+    desc: "A women's safety monitoring system pairing an ESP32-S3 wearable with a Flutter app. Automatic mode listens for a secret trigger word, then captures photo + audio evidence and alerts contacts over WhatsApp with location. Manual mode sends a 2-second-hold SOS with just location and timestamp for speed.",
+    stack: ["ESP32-S3", "Flutter", "Firebase", "Node.js", "ElevenLabs STT"],
+    link: "https://github.com/SubashreeT24/SheAlert"
+  },
+  {
+    num: "02",
+    title: "Smart Coffee Maker",
+    tag: "EMBEDDED · 8052",
+    desc: "A fully automated coffee brewing system on an 8052 microcontroller. An IR sensor detects the cup, push buttons select strength/sweetness/auto mode, and dual DC motors dispense coffee powder and sugar accordingly — guided by an LCD at every step.",
+    stack: ["8052 MCU", "IR Sensor", "Embedded C"],
+    link: "https://github.com/SubashreeT24/Smart-Coffee-Maker"
+  },
+  {
+    num: "03",
+    title: "Combinational Lock with Alert Mechanism",
+    tag: "DIGITAL LOGIC DESIGN",
+    desc: "A secure digital lock built entirely from combinational and sequential logic — no microcontroller. D flip-flops store a 4-bit password, comparators verify entries, and a counter tracks wrong attempts, triggering a red-LED alert once a threshold is exceeded.",
+    stack: ["D Flip-Flops", "Comparators", "Counters"],
+    link: "https://github.com/SubashreeT24/Combinational-Lock-with-Alert-Mechanism"
+  },
+  {
+    num: "04",
+    title: "14nm Double Gate MOSFET",
+    tag: "VLSI · DEVICE MODELING",
+    desc: "A full workflow from device physics to circuit design: modeled a 14nm Double Gate MOSFET in Sentaurus TCAD, extracted device characteristics into a Verilog-A compact model, then imported it into Cadence Virtuoso to design and analyze a Common Source Amplifier.",
+    stack: ["Sentaurus TCAD", "Verilog-A", "Cadence Virtuoso"],
+    link: "https://github.com/SubashreeT24/14nm-Double-Gate-MOSFET"
+  },
+  {
+    num: "05",
+    title: "Gas Alert — Intelligent Sensor Detection System",
+    tag: "EMBEDDED · ARDUINO",
+    desc: "A standalone gas leak detection system using an MQ9 sensor on Arduino UNO. Continuously monitors gas concentration, displays live readings on an I2C LCD, and triggers a buzzer + red LED the moment levels cross a safe threshold — no app or cloud dependency.",
+    stack: ["Arduino UNO", "MQ9 Sensor", "I2C LCD"],
+    link: "https://github.com/SubashreeT24/Gas-Alert-Intelligent-Sensor-Detection-System"
+  },
+  {
+    num: "06",
+    title: "Obstacle-Detecting Glasses",
+    tag: "WEARABLE · ARDUINO",
+    desc: "An assistive wearable built into a spectacle frame for visually impaired users. An HC-SR04 ultrasonic sensor continuously measures distance to obstacles ahead, and an Arduino UNO triggers real-time buzzer/vibration feedback for safer, hands-free navigation.",
+    stack: ["Arduino UNO", "HC-SR04", "Vibration Motor"],
+    link: "https://github.com/SubashreeT24/Arduino-obstacle-detecting-glasses-with-ultrasonic-sensor"
+  }
+];
+
+const menuToggle = document.getElementById('menu-toggle');
+const mobileNav = document.getElementById('mobile-nav');
+const mobileNavClose = document.getElementById('mobile-nav-close');
+const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+
+function openMobileNav(){
+  mobileNav.classList.add('active');
+  mobileNavOverlay.classList.add('active');
+}
+function closeMobileNav(){
+  mobileNav.classList.remove('active');
+  mobileNavOverlay.classList.remove('active');
+}
+menuToggle.addEventListener('click', openMobileNav);
+mobileNavClose.addEventListener('click', closeMobileNav);
+mobileNavOverlay.addEventListener('click', closeMobileNav);
+
+// Intercept all in-page anchor links to scroll via JS
+// (prevents sandboxed preview environments from trying to navigate the top-level page)
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const targetId = link.getAttribute('href').slice(1);
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      e.preventDefault();
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+document.querySelectorAll('.mobile-nav a').forEach(a => a.addEventListener('click', closeMobileNav));
+
+// Gmail web-compose fallback for email links.
+// Some visitors have no default mail app configured, so mailto: silently does nothing.
+// We let the mailto: attempt fire as usual, and also open Gmail's web compose in a new
+// tab a moment later — if a mail app actually opened, the user just ignores the extra tab.
+document.querySelectorAll('[data-mailto]').forEach(link => {
+  link.addEventListener('click', () => {
+    const email = link.getAttribute('data-mailto');
+    setTimeout(() => {
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, '_blank');
+    }, 300);
+  });
+});
+
+function truncateAtWord(text, maxLen){
+  if (text.length <= maxLen) return text;
+  const cut = text.slice(0, maxLen);
+  const lastSpace = cut.lastIndexOf(' ');
+  return cut.slice(0, lastSpace > 0 ? lastSpace : maxLen) + '…';
+}
+
+const grid = document.getElementById('project-grid');
+projects.forEach((p, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.setAttribute('data-num', p.num);
+  card.innerHTML = `
+    <div class="card-num">${p.num}</div>
+    <h3>${p.title}</h3>
+    <p>${truncateAtWord(p.desc, 90)}</p>
+    <div class="card-footer">
+      <div class="tags"><span class="card-tag">${p.tag}</span></div>
+      <div class="card-arrow">↗</div>
+    </div>
+  `;
+  card.addEventListener('click', () => openModal(p));
+  grid.appendChild(card);
+});
+
+function openModal(p){
+  document.getElementById('modal-tag').textContent = p.tag;
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-desc').textContent = p.desc;
+  document.getElementById('modal-link').href = p.link;
+  const stackEl = document.getElementById('modal-stack');
+  stackEl.innerHTML = p.stack.map(s => `<span class="card-tag">${s}</span>`).join('');
+  document.getElementById('modal-overlay').classList.add('active');
+}
+document.getElementById('modal-close').addEventListener('click', () => {
+  document.getElementById('modal-overlay').classList.remove('active');
+});
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if(e.target.id === 'modal-overlay') e.target.classList.remove('active');
+});
+// Scroll progress bar
+const progressBar = document.getElementById('scroll-progress');
+function updateProgress(){
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = pct + '%';
+}
+window.addEventListener('scroll', updateProgress);
+updateProgress();
+
+// Active nav highlighting
+const navLinks = document.querySelectorAll('nav a[href^="#"]');
+const sections = ['home','about','experience','projects','contact'].map(id => document.getElementById(id)).filter(Boolean);
+function updateActiveNav(){
+  let current = sections[0]?.id;
+  const scrollPos = window.scrollY + window.innerHeight * 0.3;
+  sections.forEach(sec => {
+    if (sec.offsetTop <= scrollPos) current = sec.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
+
+// Scroll-reveal
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+// Contact form submission
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const submitBtn = contactForm.querySelector('.form-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+  try {
+    const res = await fetch(contactForm.action, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      formStatus.textContent = "Thanks — I'll get back to you soon.";
+      formStatus.style.color = '#5FE0D0';
+      contactForm.reset();
+    } else {
+      formStatus.textContent = 'Something went wrong. Try emailing directly instead.';
+      formStatus.style.color = '#E88585';
+    }
+  } catch (err) {
+    formStatus.textContent = 'Something went wrong. Try emailing directly instead.';
+    formStatus.style.color = '#E88585';
+  }
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Send Message →';
+});
+
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 500);
+});
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>
