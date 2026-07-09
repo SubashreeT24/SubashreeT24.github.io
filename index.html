@@ -145,17 +145,22 @@
     overflow:hidden;
   }
   .hero-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:48px; flex-wrap:wrap;
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:32px; flex-wrap:wrap;
+    max-width:1180px;
+    margin:0 auto;
   }
   .hero-text{min-width:0; flex:1 1 480px;}
   .hero-photo{
     flex:0 0 auto;
-    width:200px; height:200px; border-radius:50%;
+    width:280px; height:340px; border-radius:16px;
     overflow:hidden;
     border:2px solid transparent;
     background:linear-gradient(var(--ink),var(--ink)) padding-box, var(--grad) border-box;
     box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    /* aligns the top of the frame with the h1 line, and pulls it left/up relative to before */
+    margin-top:66px;
+    margin-right:24px;
   }
   .hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
 
@@ -410,7 +415,7 @@
     .menu-toggle{display:block;}
     .about-grid{grid-template-columns:1fr;}
     .hero-inner{flex-direction:column-reverse; align-items:flex-start;}
-    .hero-photo{width:140px; height:140px;}
+    .hero-photo{width:220px; height:270px;}
   }
   @media (prefers-reduced-motion: reduce){
     .eyebrow::before, .wave-sense{animation:none;}
@@ -426,6 +431,7 @@
     .label{font-size:12px;}
     .timeline-content{padding:20px;}
     .card{padding:26px 22px;}
+    .hero-photo{width:180px; height:220px;}
   }
 </style>
 </head>
@@ -481,7 +487,6 @@
       <p class="sub">Exploring electronics one project at a time — from embedded systems and IoT to digital design — with a focus on learning by building.</p>
       <div class="hero-actions">
         <a class="btn filled" href="#projects">View Projects</a>
-        <a class="btn" href="Thirumalai_Subashree_Resume.pdf" id="resume-link-2" target="_blank">Resume</a>
         <a class="btn" href="https://github.com/SubashreeT24" id="github-link-2">GitHub</a>
       </div>
 
@@ -496,14 +501,11 @@
       </svg>
     </div>
 
-    <!-- OPTIONAL PROFILE PHOTO
-         Replace src below with your own photo path (e.g. "assets/profile.jpg")
-         and remove this comment block to show it. -->
-    <!--
+    <!-- PROFILE PHOTO
+         Replace src below with your own photo path (e.g. "assets/profile.jpg") once you upload it. -->
     <div class="hero-photo">
-      <img src="assets/profile.jpg" alt="Subashree">
+      <img src="profile.jpg" alt="Subashree">
     </div>
-    -->
   </div>
 </section>
 
@@ -594,9 +596,9 @@
     </span>
     <div class="exploring-tags">
       <span class="exploring-tag">PCB Design</span>
-      <span class="exploring-tag">RTOS Basics</span>
-      <span class="exploring-tag">FPGA Fundamentals</span>
+      <span class="exploring-tag">RTOS Fundamentals</span>
       <span class="exploring-tag">Communication Protocols</span>
+      <span class="exploring-tag">Cloud Computing</span>
     </div>
   </div>
 </section>
@@ -646,7 +648,6 @@
   <div class="section-head">
     <span class="label">CONTACT</span>
     <h2>Open to internships, project ideas, or suggestions — drop a message below.</h2>
-    <p style="color:var(--muted); font-size:15px; margin-top:14px; max-width:560px; line-height:1.6;">Available remote/online throughout the semester; open to on-site internships during college breaks.</p>
   </div>
 
   <div class="contact-grid">
@@ -802,7 +803,9 @@ projects.forEach((p, i) => {
   const card = document.createElement('div');
   card.className = 'card';
   card.setAttribute('data-num', p.num);
+  const thumbHtml = p.thumb ? `<div class="card-thumb"><img src="${p.thumb}" alt="${p.title}" loading="lazy"></div>` : '';
   card.innerHTML = `
+    ${thumbHtml}
     <div class="card-num">${p.num}</div>
     <h3>${p.title}</h3>
     <p>${truncateAtWord(p.desc, 90)}</p>
